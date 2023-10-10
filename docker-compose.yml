@@ -1,0 +1,47 @@
+version: '3'
+networks:
+    datapipeline:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: "172.18.0.0/16"
+services:
+  postgres:
+    image: 'postgres:15-alpine'
+    container_name: postgres
+    hostname: postgres
+    environment: 
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5438:5432'
+    volumes:
+      - ./data/pg-data:/var/lib/postgresql/data
+      - ./code/db/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      datapipeline:
+        ipv4_address: 172.18.0.2
+  generator:
+    container_name: generator
+    hostname: generator
+    build: 
+      context: code/generator/.
+      dockerfile: Dockerfile
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./data/csv-data:/code/csv-out
+  loader:
+    container_name: loader
+    hostname: loader
+    build: 
+      context: code/loader/.
+      dockerfile: Dockerfile
+    volumes:
+      - ./data/csv-data:/opt/bitnami/spark/csv-data
+      - ./code/loader/app:/opt/bitnami/spark/code
+    networks:
+      datapipeline:
+        ipv4_address: 172.18.0.3
