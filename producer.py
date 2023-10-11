@@ -42,7 +42,7 @@ def acked(err, msg):
 
 start_date="2023-10-10 18:00:00"
 duration_in_minutes=5
-transactions_per_minutes=20000
+transactions_per_minutes=10000
 
 start_date_time = datetime.strptime(start_date, '%Y-%m-%d %H:%M:%S')
 for i in range(duration_in_minutes):
