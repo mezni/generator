@@ -97,3 +97,16 @@ class BearerAggregate:
 
     def get_all_bearers(self):
         return self.bearers
+
+
+class CallDetailRecord:
+    def __init__(self, call_id,call_type, duration, start_time, end_time):
+        self.call_id = call_id
+        self.call_type = call_type
+        self.duration = duration
+        self.start_time = start_time
+        self.end_time = end_time
+
+
+    def __repr__(self):
+        return f"CDR(call_id={self.call_id}, call_type={self.call_type}, duration={self.duration})"

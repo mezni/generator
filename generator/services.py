@@ -1,8 +1,27 @@
+from datetime import datetime, timedelta
+import random
 from tinydb import TinyDB
-from entities import Customer, Network, Bearer
+from entities import Customer, Network, Bearer, CallDetailRecord
 from entities import CustomerAggregate, NetworkAggregate, BearerAggregate
 
+class CDRGeneratorService:
+    def __init__(self):  
+        self.call_seq = int(datetime.now().timestamp())
 
+    def generate_cdr(self,call_type):
+        self.call_seq = self.call_seq+1
+        end_time = datetime.now() 
+        duration_seconds = random.randint(0, 3600) 
+        start_time = end_time - timedelta(seconds=duration_seconds)
+        cdr = CallDetailRecord(
+        call_id = self.call_seq,
+        call_type=call_type,
+        duration = duration_seconds,
+        start_time = start_time,
+        end_time = end_time
+        )
+        return cdr
+        
 class DataLoaderService:
     def __init__(self, db_path):
         self.db = TinyDB(db_path)
@@ -87,3 +106,5 @@ class DataLoaderService:
         print("3G Networks:", networks_3g)
         print("4G Networks:", networks_4g)
         print("Bearers:", bearers)
+
+

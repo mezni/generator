@@ -1,4 +1,4 @@
-from services import DataLoaderService
+from services import DataLoaderService, CDRGeneratorService
 
 
 def main():
@@ -16,7 +16,9 @@ def main():
         networks_4g,
         bearers,
     ) = data_loader.get_results()
-
-
+    cdr_generator_service = CDRGeneratorService()
+    for _ in range(5):  
+        cdr = cdr_generator_service.generate_cdr(call_type="voice")
+        print (cdr)
 if __name__ == "__main__":
     main()
