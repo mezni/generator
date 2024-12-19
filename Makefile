@@ -6,7 +6,7 @@ FLAKE8 = $(PYTHON) -m flake8
 PYTEST = $(PYTHON) -m pytest
 
 # Directories and files
-SRC_DIR = ./configurator
+SRC_DIR = ./configurator ./generator
 TEST_DIR = tests
 
 # Install dependencies
