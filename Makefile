@@ -1,14 +1,37 @@
+# Commands
+PYTHON = python3
+PIP = $(PYTHON) -m pip
+BLACK = $(PYTHON) -m black
+FLAKE8 = $(PYTHON) -m flake8
+PYTEST = $(PYTHON) -m pytest
+
+# Directories and files
+SRC_DIR = ./configurator
+TEST_DIR = tests
+
+# Install dependencies
+.PHONY: install
 install:
-	pip install --upgrade pip &&\
-		pip install -r requirements.txt
+	$(PIP) install -r requirements.txt
+	$(PIP) install black flake8 pytest
 
-test:
-	python -m pytest -vv test_hello.py
-
+# Formatting
+.PHONY: format
 format:
-	black *.py
+	$(BLACK) $(SRC_DIR)
 
+# Linting
+.PHONY: lint
 lint:
-	pylint --disable=R,C hello.py
+	$(FLAKE8) $(SRC_DIR)
 
-all: install lint test
+# Testing
+.PHONY: test
+test:
+	$(PYTEST) $(TEST_DIR)
+
+# Clean up
+.PHONY: clean
+clean:
+	find . -type f -name "*.pyc" -delete
+	find . -type d -name "__pycache__" -exec rm -rf {} +
