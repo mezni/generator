@@ -39,7 +39,10 @@ class CDRGeneratorService:
             "end_time": end_time.strftime("%Y-%m-%d %H:%M:%S"),
             "duration": duration_seconds,
             "calling_party_number": source_customer.msisdn,
+            "calling_party_imsi": source_customer.imsi,
+            "calling_party_imei": source_customer.imei,
             "called_party_number": destination_customer.msisdn,
+            "called_party_imsi": destination_customer.imsi,
         }
 
     def generate_cdrs(self, count=5):
