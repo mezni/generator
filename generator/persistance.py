@@ -45,8 +45,10 @@ class InMemoryConfigRepository(ConfigRepository):
                     net_key=net_key,
                     network_type=net_info.get("network_type"),
                     plmn=net_info.get("plmn"),
+                    rnc_id=net_info.get("rnc_id"),
                     lac=net_info.get("lac"),
                     cell_id=net_info.get("cell_id"),
+                    tac=net_info.get("tac"),
                     MSC_Address=net_info.get("MSC_Address"),
                     SGSN_Address=net_info.get("SGSN_Address"),
                     GGSN_Address=net_info.get("GGSN_Address"),
@@ -58,7 +60,6 @@ class InMemoryConfigRepository(ConfigRepository):
                     self.networks_3g.append(network)
                 elif network.network_type == "4G":
                     self.networks_4g.append(network)
-
         bearers_table = self.db.table("bearers")
         bearers = bearers_table.all()
 

@@ -12,4 +12,8 @@ class CallType:
 
     @staticmethod
     def list_types():
-        return [attr for attr in dir(CallType) if not callable(getattr(CallType, attr)) and not attr.startswith("__")]
+        return [
+            attr
+            for attr in dir(CallType)
+            if not callable(getattr(CallType, attr)) and not attr.startswith("__")
+        ]

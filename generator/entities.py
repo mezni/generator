@@ -18,6 +18,7 @@ class Network:
         rnc_id=None,
         lac=None,
         cell_id=None,
+        tac=None,
         MSC_Address=None,
         SGSN_Address=None,
         GGSN_Address=None,
@@ -31,6 +32,7 @@ class Network:
         self.rnc_id = rnc_id
         self.lac = lac
         self.cell_id = cell_id
+        self.tac = tac
         self.MSC_Address = MSC_Address
         self.SGSN_Address = SGSN_Address
         self.GGSN_Address = GGSN_Address
@@ -39,7 +41,10 @@ class Network:
         self.MME_Address = MME_Address
 
     def __repr__(self):
-        return f"Network(network_type={self.network_type}, plmn={self.plmn}, rnc_id={self.rnc_id}, lac={self.lac}, cell_id={self.cell_id}, MSC_Address={self.MSC_Address})"
+        if self.network_type == "3G":
+            return f"Network(network_type={self.network_type}, plmn={self.plmn}, rnc_id={self.rnc_id}, lac={self.lac}, cell_id={self.cell_id}, MSC_Address={self.MSC_Address}, MSC_SGSN_AddressAddress={self.SGSN_Address}, GGSN_Address={self.GGSN_Address})"
+        if self.network_type == "4G":
+            return f"Network(network_type={self.network_type}, plmn={self.plmn}, tac={self.tac}, SGW_Address={self.SGW_Address}, PGW_Address={self.PGW_Address}, MME_Address={self.MME_Address})"
 
 
 class Customer:
