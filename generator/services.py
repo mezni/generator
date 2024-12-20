@@ -5,7 +5,7 @@ from entities import Customer, Network, Bearer, CallDetailRecord
 from entities import CustomerAggregate, NetworkAggregate, BearerAggregate
 
 class CDRGeneratorService:
-    def __init__(self):  
+    def __init__(self,home_customers,national_customers,international_customers,networks_3g,networks_4g,bearers):  
         self.call_seq = int(datetime.now().timestamp())
 
     def generate_cdr(self,call_type):
@@ -22,6 +22,13 @@ class CDRGeneratorService:
         )
         return cdr
         
+    def generate_cdrs(self):
+        cdrs = []
+        for _ in range(5):  
+            cdr = self.generate_cdr(call_type="voice")
+            cdrs.append(cdr)
+        return cdrs
+
 class DataLoaderService:
     def __init__(self, db_path):
         self.db = TinyDB(db_path)

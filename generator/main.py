@@ -16,9 +16,9 @@ def main():
         networks_4g,
         bearers,
     ) = data_loader.get_results()
-    cdr_generator_service = CDRGeneratorService()
-    for _ in range(5):  
-        cdr = cdr_generator_service.generate_cdr(call_type="voice")
-        print (cdr)
+    cdr_generator_service = CDRGeneratorService(home_customers,national_customers,international_customers,networks_3g,networks_4g,bearers)
+    cdrs=cdr_generator_service.generate_cdrs()
+    print (cdrs)
+
 if __name__ == "__main__":
     main()
