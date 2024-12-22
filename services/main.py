@@ -2,7 +2,6 @@
 from persistance import InMemoryLocationRepository, InMemoryNetworkElementRepository
 from services import LocationService, NetworkElementService
 
-# Configuration for Tunisia including network-specific configurations
 config = {
     "Country": "Tunisia",
     "Latitude": [30.24, 37.54],
@@ -55,16 +54,11 @@ network_config = {
 }
 
 
-# Instantiate the in-memory repository
 location_repo = InMemoryLocationRepository()
-
-# Instantiate the LocationService with the repository
 location_service = LocationService(location_repo)
 
-# Generate and add locations for all network types
-locations = location_service.generate_and_add_locations(config)
 
-# Print out the generated locations
+locations = location_service.generate_and_add_locations(config)
 for location in locations:
     print(location)
 
@@ -73,8 +67,7 @@ network_element_service = NetworkElementService(
     network_config, location_repo, network_elements_repo
 )
 
-# Generate network elements for all configured networks
-network_elements = network_element_service.generate_and_add_network_elements()
 
+network_elements = network_element_service.generate_and_add_network_elements()
 for ne in network_elements:
     print(ne)

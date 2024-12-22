@@ -97,7 +97,7 @@ class NetworkElementService:
         }
 
     def generate_ip(self):
-        return ".".join(str(random.randint(0, 255)) for _ in range(4))
+        return f"192.168.{random.randint(0, 255)}.{random.randint(1, 254)}"
 
     def generate_cell_info(self, network_type, location_id):
         """Returns cell_id, lac, or tac based on network type and location_id."""
