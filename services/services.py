@@ -60,11 +60,12 @@ class SubscriberService:
         return self.repository.get_random_by_type(subscriber_type)
 
     def create_subscribers(self, config: Dict) -> List[Subscriber]:
-        """
-        Create multiple subscribers based on the provided configuration.
-        """
         subscriber_seq = random.randint(10000, 20000)
         subscribers = []
+
+        # Extract MCC and MNC from config
+        mcc = config["network"]["mcc"]
+        mnc = config["network"]["mnc"]
 
         # Iterate through the configuration and create subscribers
         for subscriber_type, msisdn_config in config["msisdn"].items():
@@ -74,8 +75,8 @@ class SubscriberService:
                     subscriber_type=subscriber_type,
                     account_type="prepaid",  # Assume "prepaid" for simplicity
                     account_status="active",  # Assume "active" for simplicity
-                    mcc="404",  # Example MCC
-                    mnc="100",  # Example MNC
+                    mcc=mcc,  # Use MCC from config
+                    mnc=mnc,  # Use MNC from config
                     country_code=msisdn_config.get("country_code"),
                     ndc_ranges=msisdn_config.get("ndc_ranges"),
                     prefixes=msisdn_config.get("prefixes"),

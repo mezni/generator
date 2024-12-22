@@ -1,9 +1,13 @@
 from factories import SubscriberFactory
-from persistance import InMemorySubscriberRepository
+from persistance import InMemorySubscriberRepository  
 from services import SubscriberService
 
 # Example configuration
 config = {
+    "network": {  # Fixed syntax error here
+        "mcc": "212",
+        "mnc": "01",
+    },
     "msisdn": {
         "home": {
             "country_code": "+216",
