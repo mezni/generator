@@ -8,6 +8,17 @@ class LocationService:
     def __init__(self, repository: LocationRepositoryInterface):
         self.repository = repository  # Dependency injection of repository
 
+    def load_locations(self, locations: List[Location]):
+        """Load a list of locations into the repository."""
+        for location in locations:
+            self.repository.add(location)
+            print(location)
+
+
+class LocationLoaderService:
+    def __init__(self, repository: LocationRepositoryInterface):
+        self.repository = repository  # Dependency injection of repository
+
     def generate_and_add_locations(self, config: dict) -> List[Location]:
         """Generates locations based on the configuration for each network type and adds them to the repository."""
         locations = []  # Will store all the locations generated
@@ -79,7 +90,7 @@ class LocationService:
         return locations
 
 
-class NetworkElementService:
+class NetworkElementLoaderService:
     def __init__(
         self,
         network_config: Dict,

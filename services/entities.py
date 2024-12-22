@@ -103,6 +103,16 @@ class Location:
         if self.longitude_min > self.longitude_max:
             raise ValueError("longitude_min cannot be greater than longitude_max.")
 
+    def __repr__(self):
+        return (
+            f"Location(location_id={self.location_id}, name={self.name}, "
+            f"network_type={self.network_type}, lat_min={self.latitude_min}, lat_max={self.latitude_max}, "
+            f"lon_min={self.lon_min}, longitude_max={self.longitude_max})"
+        )
+
+    def __str__(self):
+        return f"Location: {self.name} ({self.network_type}) - Lat: {self.latitude_min}-{self.latitude_max}, Lon: {self.longitude_min}-{self.longitude_max}"
+
     def to_dict(self):
         return {
             "location_id": self.location_id,
@@ -193,6 +203,17 @@ class NetworkElement:
         """Validates that tac is a positive integer."""
         if self.tac and not isinstance(self.tac, int):
             raise ValueError(f"Invalid TAC: {self.tac}. Must be an integer.")
+
+    def __repr__(self):
+        return (
+            f"NetworkElement(element_id={self.element_id}, element_name={self.element_name}, "
+            f"network_type={self.network_type}, ip_address={self.ip_address}, location_id={self.location_id}, "
+            f"status={self.status}, function={self.function}, cell_id={self.cell_id}, "
+            f"lac={self.lac}, tac={self.tac})"
+        )
+
+    def __str__(self):
+        return f"Network Element: {self.element_name} ({self.network_type}), IP: {self.ip_address}, Location: {self.location_id}, Status: {self.status}"
 
     def to_dict(self):
         return {

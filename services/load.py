@@ -1,10 +1,6 @@
 import logging
-from persistance import (
-    TinyDBLocationRepository,
-    TinyDBNetworkElementRepository,
-    InMemoryLocationRepository,
-)
-from services import LocationLoaderService, NetworkElementLoaderService, LocationService
+from persistance import TinyDBLocationRepository, TinyDBNetworkElementRepository
+from services import LocationLoaderService, NetworkElementLoaderService
 
 # Configuration for locations and network elements
 config = {
@@ -64,19 +60,29 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Repositories (change to InMemory for testing)
-location_tinydb_repo = TinyDBLocationRepository(db_path)
-network_elements_tinydb_repo = TinyDBNetworkElementRepository(db_path)
+location_repo = TinyDBLocationRepository(db_path)
+network_elements_repo = TinyDBNetworkElementRepository(db_path)
 
 # Services
-location_loader_service = LocationLoaderService(location_tinydb_repo)
+location_service = LocationLoaderService(location_repo)
 network_element_service = NetworkElementLoaderService(
-    network_config, location_tinydb_repo, network_elements_tinydb_repo
+    network_config, location_repo, network_elements_repo
 )
 
+try:
+    # Generate and add locations
+    locations = location_service.generate_and_add_locations(config)
+    logger.info("Locations generated and added:")
+    for location in locations:
+        logger.info(location)
 
-locations = location_loader_service.generate_and_add_locations(config)
+    # Generate and add network elements
+    network_elements = network_element_service.generate_and_add_network_elements()
+    logger.info("Network elements generated and added:")
+    for ne in network_elements:
+        logger.info(ne)
 
-
-location_repo = InMemoryLocationRepository()
-location_service = LocationService(location_repo)
-location_service.load_locations(locations)
+except ValueError as e:
+    logger.error(f"Configuration error: {e}")
+except Exception as e:
+    logger.error(f"An unexpected error occurred: {e}")
