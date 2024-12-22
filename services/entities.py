@@ -22,6 +22,50 @@ class Subscriber:
         self.account_type = account_type
         self.account_status = account_status
 
+        self._validate_msisdn()
+        self._validate_imsi()
+        self._validate_imei()
+
+    def _validate_msisdn(self):
+        """Validates the MSISDN format (example: 10 digits)."""
+        if not re.match(r"^\d{10}$", self.msisdn):
+            raise ValueError(f"Invalid MSISDN: {self.msisdn}")
+
+    def _validate_imsi(self):
+        """Validates the IMSI format (example: 15 digits)."""
+        if not re.match(r"^\d{15}$", self.imsi):
+            raise ValueError(f"Invalid IMSI: {self.imsi}")
+
+    def _validate_imei(self):
+        """Validates the IMEI format (example: 15 digits)."""
+        if not re.match(r"^\d{15}$", self.imei):
+            raise ValueError(f"Invalid IMEI: {self.imei}")
+
+    def to_dict(self):
+        return {
+            "subscriber_id": self.subscriber_id,
+            "msisdn": self.msisdn,
+            "imsi": self.imsi,
+            "imei": self.imei,
+            "sim_id": self.sim_id,
+            "subscriber_type": self.subscriber_type,
+            "account_type": self.account_type,
+            "account_status": self.account_status,
+        }
+
+    @classmethod
+    def from_dict(cls, data):
+        return cls(
+            subscriber_id=data["subscriber_id"],
+            msisdn=data["msisdn"],
+            imsi=data["imsi"],
+            imei=data["imei"],
+            sim_id=data["sim_id"],
+            subscriber_type=data["subscriber_type"],
+            account_type=data["account_type"],
+            account_status=data["account_status"],
+        )
+
 
 class Location:
     def __init__(
@@ -59,18 +103,27 @@ class Location:
         if self.longitude_min > self.longitude_max:
             raise ValueError("longitude_min cannot be greater than longitude_max.")
 
-    def contains_point(self, latitude: float, longitude: float) -> bool:
-        """Checks if a point is within the location's geographic boundaries."""
-        return (self.latitude_min <= latitude <= self.latitude_max) and (
-            self.longitude_min <= longitude <= self.longitude_max
-        )
+    def to_dict(self):
+        return {
+            "location_id": self.location_id,
+            "name": self.name,
+            "network_type": self.network_type,
+            "latitude_min": self.latitude_min,
+            "latitude_max": self.latitude_max,
+            "longitude_min": self.longitude_min,
+            "longitude_max": self.longitude_max,
+        }
 
-    def __repr__(self):
-        """Provides a string representation of the Location object."""
-        return (
-            f"Location({self.location_id}, {self.name}, {self.network_type}, "
-            f"Latitude: {self.latitude_min} to {self.latitude_max}, "
-            f"Longitude: {self.longitude_min} to {self.longitude_max})"
+    @classmethod
+    def from_dict(cls, data):
+        return cls(
+            location_id=data["location_id"],
+            name=data["name"],
+            network_type=data["network_type"],
+            latitude_min=data["latitude_min"],
+            latitude_max=data["latitude_max"],
+            longitude_min=data["longitude_min"],
+            longitude_max=data["longitude_max"],
         )
 
 
@@ -104,6 +157,9 @@ class NetworkElement:
         # Validate attributes
         self._validate_ip_address()
         self._validate_status()
+        self._validate_cell_id()
+        self._validate_lac()
+        self._validate_tac()
 
     def _validate_ip_address(self):
         """Validates the IP address format."""
@@ -123,11 +179,46 @@ class NetworkElement:
                 f"Invalid status: {self.status}. Valid statuses are: {self.VALID_STATUSES}"
             )
 
-    def __repr__(self):
-        """Provides a string representation of the NetworkElement object."""
-        return (
-            f"NetworkElement(ID: {self.element_id}, Name: {self.element_name}, "
-            f"Type: {self.network_type}, IP: {self.ip_address}, Status: {self.status}, "
-            f"Function: {self.function}, Location ID: {self.location_id}, "
-            f"Cell ID: {self.cell_id}, LAC: {self.lac}, TAC: {self.tac})"
+    def _validate_cell_id(self):
+        """Validates that cell_id is a positive integer."""
+        if self.cell_id and not isinstance(self.cell_id, int):
+            raise ValueError(f"Invalid cell_id: {self.cell_id}. Must be an integer.")
+
+    def _validate_lac(self):
+        """Validates that lac is a positive integer."""
+        if self.lac and not isinstance(self.lac, int):
+            raise ValueError(f"Invalid LAC: {self.lac}. Must be an integer.")
+
+    def _validate_tac(self):
+        """Validates that tac is a positive integer."""
+        if self.tac and not isinstance(self.tac, int):
+            raise ValueError(f"Invalid TAC: {self.tac}. Must be an integer.")
+
+    def to_dict(self):
+        return {
+            "element_id": self.element_id,
+            "element_name": self.element_name,
+            "network_type": self.network_type,
+            "ip_address": self.ip_address,
+            "status": self.status,
+            "function": self.function,
+            "location_id": self.location_id,
+            "cell_id": self.cell_id,
+            "lac": self.lac,
+            "tac": self.tac,
+        }
+
+    @classmethod
+    def from_dict(cls, data):
+        return cls(
+            element_id=data["element_id"],
+            element_name=data["element_name"],
+            network_type=data["network_type"],
+            ip_address=data["ip_address"],
+            status=data["status"],
+            function=data["function"],
+            location_id=data["location_id"],
+            cell_id=data.get("cell_id"),
+            lac=data.get("lac"),
+            tac=data.get("tac"),
         )

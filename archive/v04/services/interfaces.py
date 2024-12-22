@@ -1,16 +1,12 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
+import random
 
 
 class LocationRepositoryInterface(ABC):
     @abstractmethod
     def add(self, location: "Location") -> None:
         """Adds a new location to the repository."""
-        pass
-
-    @abstractmethod
-    def load_from_list(self, locations: List["Location"]) -> None:
-        """Loads multiple locations into the repository."""
         pass
 
     @abstractmethod
@@ -48,11 +44,6 @@ class NetworkElementRepositoryInterface(ABC):
     @abstractmethod
     def add(self, network_element: "NetworkElement") -> None:
         """Adds a new network element to the repository."""
-        pass
-
-    @abstractmethod
-    def load_from_list(self, network_elements: List["NetworkElement"]) -> None:
-        """Loads multiple network elements into the repository."""
         pass
 
     @abstractmethod

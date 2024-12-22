@@ -2,7 +2,6 @@
 from persistance import InMemoryLocationRepository, InMemoryNetworkElementRepository
 from services import LocationService, NetworkElementService
 from persistance import TinyDBLocationRepository, TinyDBNetworkElementRepository
-
 config = {
     "Country": "Tunisia",
     "Latitude": [30.24, 37.54],
@@ -55,7 +54,7 @@ network_config = {
 }
 
 location_repo = TinyDBLocationRepository("config.json")
-# location_repo = InMemoryLocationRepository()
+#location_repo = InMemoryLocationRepository()
 location_service = LocationService(location_repo)
 
 
@@ -64,7 +63,7 @@ for location in locations:
     print(location)
 
 network_elements_repo = TinyDBNetworkElementRepository("config.json")
-# network_elements_repo = InMemoryNetworkElementRepository()
+#network_elements_repo = InMemoryNetworkElementRepository()
 network_element_service = NetworkElementService(
     network_config, location_repo, network_elements_repo
 )
