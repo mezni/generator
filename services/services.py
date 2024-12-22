@@ -261,29 +261,43 @@ class NetworkElementService:
 
     def generate_element_info(self, network_type, element_type, location_id):
         """Generates network element info based on network type and location ID."""
-        cell_id, lac, tac = self.generate_cell_info(network_type, location_id)
-        return {
-            "element_id": random.randint(1000, 9999),
-            "element_name": f"{network_type}_{element_type}_{random.randint(1000, 9999)}",
-            "network_type": network_type,
-            "ip_address": self.generate_ip(),
-            "location_id": location_id,
-            "status": random.choice(["Active", "Inactive"]),
-            "function": self.assign_function(element_type, network_type),
-            **({"cell_id": cell_id, "lac": lac} if cell_id and lac else {}),
-            **({"tac": tac} if tac else {}),
-        }
+        if element_type in ["BSC", "NodeBs", "eNodeBs", "gNodeB"]:
+            cell_id, lac, tac = self.generate_cell_info(network_type, location_id)
+            return {
+                "element_id": random.randint(1000, 9999),
+                "element_name": f"{network_type}_{element_type}_{random.randint(1000, 9999)}",
+                "network_type": network_type,
+                "ip_address": self.generate_ip(),
+                "location_id": location_id,
+                "status": random.choice(["Active", "Inactive"]),
+                "function": self.assign_function(element_type, network_type),
+                **({"cell_id": cell_id, "lac": lac} if cell_id and lac else {}),
+                **({"tac": tac} if tac else {}),
+            }
+        else:
+            return {
+                "element_id": random.randint(1000, 9999),
+                "element_name": f"{network_type}_{element_type}_{random.randint(1000, 9999)}",
+                "network_type": network_type,
+                "ip_address": self.generate_ip(),
+                "location_id": location_id,
+                "status": random.choice(["Active"]),  # ["Active", "Inactive"]
+                "function": self.assign_function(element_type, network_type),
+            }
 
     def generate_elements(
         self, network_type, element_type, location_ids, num_elements=1
     ):
+        result = []
         location_ids = [
             location_ids[i % len(location_ids)] for i in range(num_elements)
         ]
-        return [
-            self.generate_element_info(network_type, element_type, location_id)
-            for location_id in location_ids
-        ]
+        for location_id in location_ids:
+            element = self.generate_element_info(
+                network_type, element_type, location_id
+            )
+            result.append(element)
+        return result
 
     def generate_and_add_network_elements(self):
         """Generates network elements for each network type based on the network configuration."""
@@ -300,8 +314,9 @@ class NetworkElementService:
                 elements = self.generate_elements(
                     network_type, element_type, location_ids, num_elements
                 )
+
                 for element in elements:
                     network_element = NetworkElement(**element)
                     self.repository.add(network_element)
-                network_elements.append(network_element)
+                    network_elements.append(network_element)
         return network_elements
