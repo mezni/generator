@@ -101,7 +101,7 @@ class NetworkElementService:
 
     def generate_cell_info(self, network_type, location_id):
         """Returns cell_id, lac, or tac based on network type and location_id."""
-        location = self.location_repo.get(location_id)
+        location = self.location_repo.get_by_id(location_id)
 
         if network_type in ["2G", "3G"]:
             lac = location.location_id  # lac for 2G/3G
@@ -275,32 +275,33 @@ class NetworkElementService:
         }
 
     def generate_elements(
-        self, network_type, element_type, num_elements=5, location_ids=None
+        self, network_type, element_type, location_ids, num_elements=1
     ):
-        """Generates multiple network elements based on network type and element type."""
-        location_ids = location_ids or [
-            random.randint(1, 100) for _ in range(num_elements)
+        location_ids = [
+            location_ids[i % len(location_ids)] for i in range(num_elements)
         ]
         return [
             self.generate_element_info(network_type, element_type, location_id)
             for location_id in location_ids
         ]
 
-    def generate_network_elements(self):
+    def generate_and_add_network_elements(self):
         """Generates network elements for each network type based on the network configuration."""
-        network_elements = {}
+        network_elements = []
         for network_type in self.network_config:
             for element_type in self.network_element_types.get(network_type, []):
                 num_elements = self.network_config[network_type].get(element_type, 1)
-                print(self.location_repo.get_all())
                 location_ids = [
-                    location.location_id for location in self.location_repo.get_all()
+                    location.location_id
+                    for location in self.location_repo.get_all_by_network_type(
+                        network_type
+                    )
                 ]
                 elements = self.generate_elements(
-                    network_type, element_type, num_elements, location_ids
+                    network_type, element_type, location_ids, num_elements
                 )
                 for element in elements:
-                    network_element = NetworkElement(**element)  # Create instance
+                    network_element = NetworkElement(**element)
                     self.repository.add(network_element)
-                network_elements[element_type] = elements
+                network_elements.append(network_element)
         return network_elements

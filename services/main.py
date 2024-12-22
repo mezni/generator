@@ -75,8 +75,7 @@ network_element_service = NetworkElementService(
 )
 
 # Generate network elements for all configured networks
-network_elements = network_element_service.generate_network_elements()
+network_elements = network_element_service.generate_and_add_network_elements()
 
-# Print out the generated locations
-for network_element in network_elements:
-    print(network_element)
+for ne in network_elements:
+    print(ne)

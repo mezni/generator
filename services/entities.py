@@ -4,7 +4,7 @@ import re
 class Location:
     def __init__(
         self,
-        Location_id: int,
+        location_id: int,
         name: str,
         network_type: str,
         latitude_min: float,
@@ -12,7 +12,7 @@ class Location:
         longitude_min: float,
         longitude_max: float,
     ):
-        self.Location_id = Location_id
+        self.location_id = location_id
         self.name = name
         self.network_type = network_type
         self.latitude_min = latitude_min
@@ -46,7 +46,7 @@ class Location:
     def __repr__(self):
         """Provides a string representation of the Location object."""
         return (
-            f"Location({self.Location_id}, {self.name}, {self.network_type}, "
+            f"Location({self.location_id}, {self.name}, {self.network_type}, "
             f"Latitude: {self.latitude_min} to {self.latitude_max}, "
             f"Longitude: {self.longitude_min} to {self.longitude_max})"
         )

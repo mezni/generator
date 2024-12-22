@@ -16,7 +16,7 @@ class InMemoryLocationRepository(LocationRepositoryInterface):
 
     def get_by_id(self, location_id: int) -> Optional[Location]:
         return next(
-            (loc for loc in self.locations if loc.Location_id == location_id), None
+            (loc for loc in self.locations if loc.location_id == location_id), None
         )
 
     def get_by_name(self, name: str) -> Optional[Location]:
@@ -31,7 +31,7 @@ class InMemoryLocationRepository(LocationRepositoryInterface):
 
     def delete(self, location_id: int) -> None:
         self.locations = [
-            loc for loc in self.locations if loc.Location_id != location_id
+            loc for loc in self.locations if loc.location_id != location_id
         ]
 
 
