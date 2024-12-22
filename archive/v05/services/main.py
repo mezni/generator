@@ -1,5 +1,12 @@
-from factories import LocationFactory, NetworkElementFactory
+import logging
+from persistance import (
+    TinyDBLocationRepository,
+    TinyDBNetworkElementRepository,
+    InMemoryLocationRepository,
+)
+from services import LocationLoaderService, NetworkElementLoaderService, LocationService
 
+# Configuration for locations and network elements
 config = {
     "Country": "Tunisia",
     "Latitude": [30.24, 37.54],
@@ -51,13 +58,25 @@ network_config = {
     },
 }
 
-location_factory = LocationFactory()
-locations = location_factory.create_locations(config)
-for location in locations:
-    print(location)
+db_path = "config.json"
+# Setup logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Repositories (change to InMemory for testing)
+location_tinydb_repo = TinyDBLocationRepository(db_path)
+network_elements_tinydb_repo = TinyDBNetworkElementRepository(db_path)
+
+# Services
+location_loader_service = LocationLoaderService(location_tinydb_repo)
+network_element_service = NetworkElementLoaderService(
+    network_config, location_tinydb_repo, network_elements_tinydb_repo
+)
 
 
-network_element_factory = NetworkElementFactory()
-network_elements = network_element_factory.create_network_elements(network_config)
-for network_element in network_elements:
-    print(network_element)
+locations = location_loader_service.generate_and_add_locations(config)
+
+
+location_repo = InMemoryLocationRepository()
+location_service = LocationService(location_repo)
+location_service.load_locations(locations)
