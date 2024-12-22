@@ -1,6 +1,28 @@
 import re
 
 
+class Subscriber:
+    def __init__(
+        self,
+        subscriber_id: int,
+        msisdn: str,
+        imsi: str,
+        imei: str,
+        sim_id: str,
+        subscriber_type: str,  # home. national, international
+        account_type: str,  # prepaid, postpaid
+        account_status: str,
+    ):
+        self.subscriber_id = subscriber_id
+        self.msisdn = msisdn
+        self.imsi = imsi
+        self.imei = imei
+        self.sim_id = sim_id
+        self.subscriber_type = subscriber_type
+        self.account_type = account_type
+        self.account_status = account_status
+
+
 class Location:
     def __init__(
         self,
