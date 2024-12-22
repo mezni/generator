@@ -2,6 +2,7 @@ import random
 from typing import List, Union
 from entities import Subscriber
 
+
 class SubscriberFactory:
     def generate_msisdn(
         self,
@@ -21,16 +22,19 @@ class SubscriberFactory:
                         "'country_code' and 'ndc_ranges' are required for 'home' or 'national' types."
                     )
 
-                # Choose a random NDC range
-                selected_range = random.choice(ndc_ranges)
-                if isinstance(selected_range, tuple) and len(selected_range) == 2:
+                if isinstance(ndc_ranges, int):
+                    ndc_value = ndc_ranges  # Use the single integer as the NDC
+                elif isinstance(ndc_ranges, (list, tuple)) and len(ndc_ranges) == 2:
+                    selected_range = random.choice(ndc_ranges)
                     ndc_value = random.randint(selected_range[0], selected_range[1])
                 else:
                     raise ValueError(
-                        "'ndc_ranges' must be a list of tuples, each containing a start and end value."
+                        "'ndc' must be an integer or a range (list/tuple) with two values."
                     )
 
-                subscriber_number = random.randint(10 ** (digits - 1), 10**digits - 1)  # Random subscriber number
+                subscriber_number = random.randint(
+                    10 ** (digits - 1), 10**digits - 1
+                )  # Random subscriber number
                 return f"{country_code}{ndc_value}{subscriber_number}"
 
             elif msisdn_type == "international":
@@ -38,7 +42,9 @@ class SubscriberFactory:
                     raise ValueError("'prefixes' is required for 'international' type.")
 
                 selected_prefix = random.choice(prefixes)  # Randomly select a prefix
-                subscriber_number = random.randint(10 ** (digits - 1), 10**digits - 1)  # Random subscriber number
+                subscriber_number = random.randint(
+                    10 ** (digits - 1), 10**digits - 1
+                )  # Random subscriber number
                 return f"{selected_prefix}{subscriber_number}"
 
             else:
@@ -107,4 +113,3 @@ class SubscriberFactory:
             account_type=account_type,
             account_status=account_status,
         )
-

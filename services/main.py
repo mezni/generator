@@ -1,29 +1,37 @@
 from factories import SubscriberFactory
-factory = SubscriberFactory()
+from persistance import InMemorySubscriberRepository
+from services import SubscriberService
 
-# Define the required inputs
-subscriber_id = 1
-subscriber_type = "international"
-account_type = "prepaid"
-account_status = "Active"
-mcc = "404"  # Mobile Country Code (e.g., India)
-mnc = "10"   # Mobile Network Code (e.g., Airtel India)
-country_code = "+216"  # Country code for MSISDN
-ndc_ranges = [(50, 55), (30, 35)]  # List of NDC ranges for MSISDN
-prefixes = ["+91", "+92", "+93"]  # List of international prefixes
+# Example configuration
+config = {
+    "msisdn": {
+        "home": {
+            "country_code": "+216",
+            "ndc_ranges": [[30, 35], [50, 55]],
+            "digits": 6,
+            "count": 10,
+        },
+        "national": {
+            "country_code": "+216",
+            "ndc_ranges": [[20, 29], [90, 99]],
+            "digits": 6,
+            "count": 10,
+        },
+        "international": {
+            "prefixes": ["+2126", "+336", "+441", "+491"],
+            "digits": 8,
+            "count": 10,
+        },
+    }
+}
 
-# Create a subscriber
-subscriber = factory.create_subscriber(
-    subscriber_id=subscriber_id,
-    subscriber_type=subscriber_type,
-    account_type=account_type,
-    account_status=account_status,
-    mcc=mcc,
-    mnc=mnc,
-    country_code=country_code,
-    ndc_ranges=ndc_ranges,
-    prefixes=prefixes,
-)
+# Create the SubscriberService
+repository = InMemorySubscriberRepository()  # or your actual repository implementation
+subscriber_service = SubscriberService(repository)
 
+# Create subscribers from config
+subscribers = subscriber_service.create_subscribers(config)
 
-print (subscriber)
+# Print created subscribers
+for subscriber in subscribers:
+    print(subscriber)

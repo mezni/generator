@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from entities import Subscriber  
+from entities import Subscriber
+
 
 class SubscriberRepository(ABC):
     @abstractmethod
