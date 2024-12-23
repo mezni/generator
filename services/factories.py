@@ -268,10 +268,18 @@ class ServiceTypeFactory:
                 for bearer_type in tech_data["bearer_types"]:
                     volte_flag = False
                     vowifi_flag = False
+                    peak_download_speed = None
+                    peak_upload_speed = None
+
                     if bearer_type == "VoLTE":
                         volte_flag = True
                     if bearer_type == "VoWiFi":
                         vowifi_flag = True
+
+                    #                    if service_name in ["Data", "MMS", "Video Call", "VoLTE", "VoWiFi"]:
+                    #                        peak_download_speed = service_data["throughput_range"][1]
+                    #                        peak_upload_speed = service_data["throughput_range"][1]
+
                     service_type = self.create_service_type(
                         service_type_id,
                         network_technology,
