@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Module name
+
 MODULE="generator"
 
 # Current date
