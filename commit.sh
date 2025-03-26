@@ -3,8 +3,6 @@
 # Module name
 MODULE="generator"
 
-
-
 # Current date
 DATE=$(date +%Y-%m-%d)
 
